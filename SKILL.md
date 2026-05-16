@@ -56,7 +56,7 @@ Within a single session, skip Step 0 on follow-up `/analyze` calls once `--check
 
 ## How to invoke
 
-**Step 1 — Parse user input.** Extract the video source (URL or file path) from `$ARGUMENTS`.
+**Step 1 — Parse user input.** Separate the video source (URL or file path) from any question or instruction the user included. Example: `/analyze https://youtu.be/abc what are the best learning moments?` → source = `https://youtu.be/abc`, question = `what are the best learning moments?`. If the user included flags like `--start 2:30`, pass them to the script.
 
 **Step 2 — Run the analyzer.**
 
