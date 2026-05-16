@@ -61,9 +61,16 @@ def parse_gemini_response(raw_text: str) -> list:
     return validate_segments(segments)
 
 
-def understand_video(video_path: str, api_key: str) -> list:
+def understand_video(video_path: str, api_key: str,
+                     start_time: str = None, end_time: str = None) -> list:
     """
     Upload video to Gemini and get structured visual analysis.
+
+    Args:
+        video_path: Path to video file
+        api_key: Gemini API key
+        start_time: Optional start time to focus on (MM:SS or HH:MM:SS)
+        end_time: Optional end time to focus on (MM:SS or HH:MM:SS)
 
     Returns: list of segment dicts [{start, end, visual, scene}, ...]
     """
@@ -96,6 +103,10 @@ def understand_video(video_path: str, api_key: str) -> list:
 
         # Generate content with structured output
         prompt = get_prompt()
+        if start_time or end_time:
+            range_str = f" Focus ONLY on the section from {start_time or '0:00'} to {end_time or 'the end'}. Ignore content outside this range."
+            prompt += range_str
+
         response = client.models.generate_content(
             model="gemini-2.5-flash",
             contents=[uploaded_file, prompt],

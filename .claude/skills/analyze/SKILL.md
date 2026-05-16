@@ -62,6 +62,8 @@ python3 "${CLAUDE_PROJECT_DIR}/scripts/analyze.py" "<source>" --out-dir .
 
 Optional flags:
 - `--max-frames N` — Cap on extracted frames (default: 80)
+- `--start T` — Focus start time (SS, MM:SS, or HH:MM:SS). Zooms into a section.
+- `--end T` — Focus end time (SS, MM:SS, or HH:MM:SS). Use with --start for a range.
 - `--low-res` — Use 256px frame width instead of 512px (smaller output)
 - `--no-whisper` — Disable Whisper fallback (frames + visuals only if no captions)
 - `--whisper groq|openai` — Force a specific Whisper backend

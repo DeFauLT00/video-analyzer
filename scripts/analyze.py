@@ -34,6 +34,10 @@ def parse_args(argv=None) -> argparse.Namespace:
                         help="Force Whisper backend")
     parser.add_argument('--low-res', action='store_true', help="Use 256px frame width (vs 512px)")
     parser.add_argument('--force-long', action='store_true', help="Allow videos over 90 minutes")
+    parser.add_argument('--start', type=str, default=None,
+                        help="Start time to focus on (SS, MM:SS, or HH:MM:SS)")
+    parser.add_argument('--end', type=str, default=None,
+                        help="End time to focus on (SS, MM:SS, or HH:MM:SS)")
 
     return parser.parse_args(argv)
 
@@ -79,6 +83,10 @@ def main():
             print(f"Video file too large ({video_size / 1e9:.1f} GB). Max 2 GB.", file=sys.stderr)
             sys.exit(1)
 
+        # Parse time range
+        start_sec = _parse_time(args.start) if args.start else None
+        end_sec = _parse_time(args.end) if args.end else None
+
         # Step 2: Transcribe
         print("Step 2/5: Extracting transcript...", file=sys.stderr)
         transcript = get_transcript(
@@ -88,10 +96,25 @@ def main():
             no_whisper=args.no_whisper,
         )
 
+        # Filter transcript to range if specified
+        if start_sec is not None or end_sec is not None:
+            transcript['segments'] = _filter_segments_to_range(
+                transcript['segments'], start_sec, end_sec
+            )
+
         # Step 3: Gemini visual understanding
         print("Step 3/5: Analyzing video with Gemini...", file=sys.stderr)
         api_key = _load_key('GOOGLE_API_KEY', ENV_FILE)
-        visual_segments = understand_video(dl['video_path'], api_key)
+        visual_segments = understand_video(
+            dl['video_path'], api_key,
+            start_time=args.start, end_time=args.end,
+        )
+
+        # Filter visual segments to range
+        if start_sec is not None or end_sec is not None:
+            visual_segments = _filter_visual_to_range(
+                visual_segments, start_sec, end_sec
+            )
 
         # Step 4: Extract frames
         print("Step 4/5: Extracting frames...", file=sys.stderr)
@@ -146,6 +169,45 @@ def main():
         # Cleanup temp files
         if os.path.exists(cache_dir):
             shutil.rmtree(cache_dir, ignore_errors=True)
+
+
+def _parse_time(time_str: str) -> float:
+    """Parse SS, MM:SS, or HH:MM:SS to seconds."""
+    parts = time_str.split(':')
+    if len(parts) == 3:
+        return int(parts[0]) * 3600 + int(parts[1]) * 60 + float(parts[2])
+    elif len(parts) == 2:
+        return int(parts[0]) * 60 + float(parts[1])
+    return float(parts[0])
+
+
+def _filter_segments_to_range(segments: list, start_sec: float = None, end_sec: float = None) -> list:
+    """Filter transcript segments to a time range."""
+    filtered = []
+    for seg in segments:
+        seg_start = seg.get('start_seconds', 0)
+        seg_end = seg.get('end_seconds', seg_start)
+        if start_sec is not None and seg_end < start_sec:
+            continue
+        if end_sec is not None and seg_start > end_sec:
+            continue
+        filtered.append(seg)
+    return filtered
+
+
+def _filter_visual_to_range(segments: list, start_sec: float = None, end_sec: float = None) -> list:
+    """Filter visual segments to a time range."""
+    from frames import timestamp_to_seconds
+    filtered = []
+    for seg in segments:
+        seg_start = timestamp_to_seconds(seg['start'])
+        seg_end = timestamp_to_seconds(seg['end'])
+        if start_sec is not None and seg_end < start_sec:
+            continue
+        if end_sec is not None and seg_start > end_sec:
+            continue
+        filtered.append(seg)
+    return filtered
 
 
 def _load_key(key_name: str, env_path: str) -> str:

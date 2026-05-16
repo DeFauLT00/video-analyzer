@@ -92,11 +92,31 @@ Full format spec: [docs/avt-spec.md](docs/avt-spec.md)
 4. **Extract** — JPEG frames pulled at AI-identified key moments via ffmpeg
 5. **Assemble** — Everything combined into the `.avt` format
 
+## Limits
+
+| Constraint | Value | Override |
+|------------|-------|---------|
+| Max duration | 90 minutes | `--force-long` |
+| Max file size | 2 GB | None (Gemini hard limit) |
+| Max frames | 80 | `--max-frames N` |
+| Frame resolution | 512px wide | `--low-res` (256px) |
+| Gemini processing timeout | 5 minutes | None |
+| Supported sites | 1400+ | Via yt-dlp |
+
+**Unsupported inputs:** Age-restricted videos, private/unlisted videos, members-only content, DRM-protected streams (Netflix, Disney+), and live streams over 90 minutes are all rejected with a clear error message.
+
 ## Cost
 
 - **Gemini 2.5 Flash:** ~$0.05 per 10-minute video
 - **Whisper (only if no captions):** ~$0.01/minute of audio
 - Most YouTube videos have native captions, so Whisper is rarely needed
+
+| Video length | Gemini cost |
+|---|---|
+| 5 min | ~$0.03 |
+| 10 min | ~$0.05 |
+| 20 min | ~$0.10 |
+| 45 min | ~$0.22 |
 
 ## Standalone CLI Usage
 
@@ -142,6 +162,8 @@ python3 scripts/analyze.py https://youtube.com/watch?v=VIDEO_ID
 | `<source>` | required | Video URL or local file path |
 | `--out-dir DIR` | `.` | Output directory |
 | `--max-frames N` | 80 | Maximum frames to extract |
+| `--start T` | none | Focus start time (SS, MM:SS, or HH:MM:SS) |
+| `--end T` | none | Focus end time (SS, MM:SS, or HH:MM:SS) |
 | `--no-whisper` | false | Disable Whisper fallback |
 | `--whisper groq\|openai` | auto | Force Whisper backend |
 | `--low-res` | false | 256px frames (vs 512px default) |
