@@ -2,74 +2,47 @@
 
 Analyze any video and produce an `.avt` (Agentic Video Transcript) file — a structured, plain-text format designed for AI agent consumption.
 
-Combines timestamped transcripts, AI-generated visual descriptions, scene tags, and extracted frame references into one parseable document.
-
-## What it does
+Takes any video URL (YouTube, Vimeo, X, TikTok, 400+ sites) or local file and produces a document combining timestamped transcripts, AI-generated visual descriptions, scene tags, and extracted frame references.
 
 ```
-Input:  Any video URL (YouTube, Vimeo, 400+ sites) or local file
+Input:  Any video URL or local file
 Output: video-slug.avt + frames/ directory
 ```
 
+## Install as a Claude Code Skill (Recommended)
+
+The easiest way to use video-analyzer. No manual setup required.
+
+**1. Add the skill** — In Claude Code, add this repository URL as a skill source:
+
+```
+https://github.com/docusphere/video-analyzer
+```
+
+**2. Run it** — From any project, type:
+
+```
+/analyze https://youtube.com/watch?v=VIDEO_ID
+```
+
+**3. That's it** — On first run, Claude will automatically:
+- Install Python dependencies
+- Install ffmpeg and yt-dlp (macOS with Homebrew)
+- Ask for your Gemini API key and save it securely
+- Run the analysis and present results
+
+You'll need a free Gemini API key. Get one at [aistudio.google.com/apikey](https://aistudio.google.com/apikey).
+
+## What you get
+
 The `.avt` format gives AI agents everything they need to understand a video without watching it:
-- **VISUAL** — What's on screen (AI-generated descriptions)
-- **AUDIO** — What's being said (transcript)
-- **FRAME** — Actual JPEG frame for deep analysis
-- **Scene tags** — Content type classification (intro, demo, talking-head, etc.)
 
-## Quick Start
+- **VISUAL** — AI-generated description of what's on screen
+- **AUDIO** — Timestamped transcript of what's being said
+- **FRAME** — Extracted JPEG frame for deep visual analysis
+- **Scene tags** — Content type classification (intro, demo, talking-head, screen-recording, etc.)
 
-### Prerequisites
-
-- Python 3.11+
-- ffmpeg (`brew install ffmpeg`)
-- yt-dlp (`brew install yt-dlp`)
-- Gemini API key ([Get one here](https://aistudio.google.com/apikey))
-
-### Install
-
-```bash
-git clone https://github.com/docusphere/video-analyzer.git
-cd video-analyzer
-pip install -r requirements.txt
-python3 scripts/preflight.py  # checks + scaffolds config
-```
-
-### Configure
-
-Add your API key to `~/.config/video-analyzer/.env`:
-
-```
-GOOGLE_API_KEY=your-key-here
-```
-
-Optional (for Whisper transcription fallback):
-```
-GROQ_API_KEY=your-key-here
-OPENAI_API_KEY=your-key-here
-```
-
-### Run
-
-```bash
-python3 scripts/analyze.py https://youtube.com/watch?v=VIDEO_ID
-```
-
-Output: `video-title-slug.avt` + `frames/` in current directory.
-
-## CLI Options
-
-| Flag | Default | Description |
-|------|---------|-------------|
-| `<source>` | required | Video URL or local file path |
-| `--out-dir DIR` | `.` | Output directory |
-| `--max-frames N` | 80 | Maximum frames to extract |
-| `--no-whisper` | false | Disable Whisper fallback |
-| `--whisper groq\|openai` | auto | Force Whisper backend |
-| `--low-res` | false | 256px frames (vs 512px default) |
-| `--force-long` | false | Allow videos over 90 minutes |
-
-## .avt Format
+### Example output
 
 ```
 AGENTIC-VT 1.0
@@ -101,35 +74,66 @@ Full format spec: [docs/avt-spec.md](docs/avt-spec.md)
 
 ## How it works
 
-1. **Download** — yt-dlp fetches the video (supports 400+ sites)
-2. **Transcribe** — Native captions extracted (Whisper API fallback)
-3. **Understand** — Gemini 2.5 Flash analyzes the full video natively
-4. **Extract** — Frames pulled at AI-identified key moments via ffmpeg
-5. **Assemble** — Everything combined into the .avt format
+1. **Download** — yt-dlp fetches the video (supports 400+ sites via yt-dlp)
+2. **Transcribe** — Native captions extracted first, Whisper API fallback if none available
+3. **Understand** — Video uploaded to Gemini 2.5 Flash for native video understanding (not frame-by-frame — the model sees the actual video)
+4. **Extract** — JPEG frames pulled at AI-identified key moments via ffmpeg
+5. **Assemble** — Everything combined into the `.avt` format
 
 ## Cost
 
-~$0.05 per 10-minute video (Gemini 2.5 Flash). Whisper adds ~$0.01/minute if no captions available.
+- **Gemini 2.5 Flash:** ~$0.05 per 10-minute video
+- **Whisper (only if no captions):** ~$0.01/minute of audio
+- Most YouTube videos have native captions, so Whisper is rarely needed
 
-## Use as a Claude Code Skill
+## Standalone CLI Usage
 
-Add this repo as a skill in Claude Code and use `/analyze` from any project:
+You can also run video-analyzer directly without Claude Code.
+
+### Prerequisites
+
+- Python 3.11+
+- ffmpeg and yt-dlp (`brew install ffmpeg yt-dlp` on macOS)
+- Gemini API key
+
+### Setup
+
+```bash
+git clone https://github.com/docusphere/video-analyzer.git
+cd video-analyzer
+pip install -r requirements.txt
+python3 scripts/preflight.py  # checks deps + scaffolds config
+```
+
+Add your Gemini API key to `~/.config/video-analyzer/.env`:
 
 ```
-/analyze https://youtube.com/watch?v=VIDEO_ID
+GOOGLE_API_KEY=your-key-here
 ```
 
-Claude will handle setup, download, analysis, and present you with a structured breakdown of the video — scenes, transcript, visual descriptions, and extracted frames.
-
-### Install as a skill
-
-In your Claude Code settings, add the repository URL as a skill source:
-
+Optional keys for Whisper transcription fallback:
 ```
-https://github.com/docusphere/video-analyzer
+GROQ_API_KEY=your-key-here
+OPENAI_API_KEY=your-key-here
 ```
 
-First run will auto-install dependencies and ask for your Gemini API key.
+### Run
+
+```bash
+python3 scripts/analyze.py https://youtube.com/watch?v=VIDEO_ID
+```
+
+### CLI Options
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `<source>` | required | Video URL or local file path |
+| `--out-dir DIR` | `.` | Output directory |
+| `--max-frames N` | 80 | Maximum frames to extract |
+| `--no-whisper` | false | Disable Whisper fallback |
+| `--whisper groq\|openai` | auto | Force Whisper backend |
+| `--low-res` | false | 256px frames (vs 512px default) |
+| `--force-long` | false | Allow videos over 90 minutes |
 
 ## License
 
