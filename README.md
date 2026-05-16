@@ -29,7 +29,7 @@ The `.avt` format gives AI agents everything they need to understand a video wit
 ### Install
 
 ```bash
-git clone https://github.com/franknillard/video-analyzer.git
+git clone https://github.com/docusphere/video-analyzer.git
 cd video-analyzer
 pip install -r requirements.txt
 python3 scripts/preflight.py  # checks + scaffolds config
@@ -126,7 +126,7 @@ Claude will handle setup, download, analysis, and present you with a structured 
 In your Claude Code settings, add the repository URL as a skill source:
 
 ```
-https://github.com/franknillard/video-analyzer
+https://github.com/docusphere/video-analyzer
 ```
 
 First run will auto-install dependencies and ask for your Gemini API key.
