@@ -16,15 +16,16 @@ Takes any video URL (YouTube, Vimeo, X, TikTok, 400+ sites) or local file and pr
 
 ## Step 0 — Setup preflight (runs every `/analyze` invocation, silent on success)
 
-Before every `/analyze` run, verify that dependencies and API keys are in place:
+Before every `/analyze` run, first ensure Python dependencies are installed, then verify system dependencies and API keys:
 
 ```bash
+pip install -r "${CLAUDE_SKILL_DIR}/requirements.txt" --quiet 2>/dev/null
 python3 "${CLAUDE_SKILL_DIR}/scripts/preflight.py" --check
 ```
 
-On exit 0, proceed to Step 1 without comment. **Do NOT announce "setup is complete" to the user.**
+The `pip install` is idempotent and silent when deps are already installed. On exit 0 from the preflight check, proceed to Step 1 without comment. **Do NOT announce "setup is complete" to the user.**
 
-On non-zero exit, follow the table:
+On non-zero exit from preflight, follow the table:
 
 | Exit | Meaning | Action |
 |------|---------|--------|
