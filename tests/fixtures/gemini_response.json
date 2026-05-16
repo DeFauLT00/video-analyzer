@@ -1,0 +1,20 @@
+[
+  {
+    "start": "00:00",
+    "end": "00:04",
+    "visual": "Man sitting at desk, ring light behind. Dark room, low-budget setup.",
+    "scene": "intro"
+  },
+  {
+    "start": "00:04",
+    "end": "00:15",
+    "visual": "Screen recording of VS Code. Claude Code terminal visible in bottom panel.",
+    "scene": "screen-recording"
+  },
+  {
+    "start": "00:15",
+    "end": "00:32",
+    "visual": "Same screen recording. Terminal output scrolling rapidly.",
+    "scene": "demo"
+  }
+]
