@@ -28,6 +28,9 @@ analyze.py (orchestrator)
   -> cleanup        (temp files + Gemini uploaded file)
 ```
 
+## Skill
+- `/analyze <url-or-path>` — Claude Code skill in `.claude/skills/analyze/SKILL.md`
+
 ## Key Docs
 - [Design Spec](docs/specs/2026-05-16-video-analyzer-design.md)
 - [PRD](docs/PRD.md)
@@ -50,5 +53,5 @@ API keys in `~/.config/video-analyzer/.env`:
 ## Gotchas
 - Gemini Files API needs polling — video processing is async.
 - yt-dlp can fail on age-restricted/private/region-locked videos. Fail clearly, don't retry.
-- Frame extraction depends on Gemini timestamps. If Gemini fails, fall back to ffmpeg scene detection.
+- Frame extraction depends on Gemini timestamps. If Gemini fails, the pipeline fails (no fallback).
 - Never log or print API keys. Config file at 0600 permissions.

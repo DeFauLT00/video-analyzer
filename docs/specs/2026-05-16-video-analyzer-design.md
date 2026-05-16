@@ -250,9 +250,11 @@ video-analyzer/
 │   ├── preflight.py
 │   └── prompts/
 │       └── understand.txt       <- Gemini prompt template
-├── commands/
-│   └── analyze.md
-├── SKILL.md
+├── .claude/
+│   └── skills/
+│       └── analyze/
+│           └── SKILL.md             <- Local project skill
+├── SKILL.md                         <- External install skill (GitHub)
 ├── LICENSE
 ├── README.md
 └── .gitignore

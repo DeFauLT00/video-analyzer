@@ -23,8 +23,8 @@ Build foundation scripts first (download, transcribe), then add intelligence lay
 
 ### B5: Orchestration
 - [ ] analyze.py — entry point orchestrator
-- [ ] SKILL.md — skill contract
-- [ ] commands/analyze.md — /analyze command
+- [ ] SKILL.md — skill contract (root for GitHub, .claude/skills/analyze/ for local)
+
 
 ### B6: Polish
 - [ ] README.md
