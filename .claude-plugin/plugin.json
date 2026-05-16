@@ -1,0 +1,13 @@
+{
+  "name": "analyze",
+  "version": "1.0.0",
+  "description": "Analyze any video (URL or local file) and produce a structured .avt (Agentic Video Transcript) file. Uses Gemini 2.5 Flash for native video understanding, extracts transcripts, and pulls frames at AI-identified key moments.",
+  "author": {
+    "name": "docusphere"
+  },
+  "homepage": "https://github.com/docusphere/video-analyzer",
+  "repository": "https://github.com/docusphere/video-analyzer",
+  "license": "Source-Available (Non-Commercial)",
+  "skills": ["SKILL.md"],
+  "commands": ["commands/analyze.md"]
+}

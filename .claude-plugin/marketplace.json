@@ -1,0 +1,16 @@
+{
+  "name": "video-analyzer",
+  "metadata": {
+    "display_name": "Video Analyzer",
+    "description": "Analyze any video and produce an Agentic Video Transcript (.avt) — structured text with timestamped transcripts, visual descriptions, scene tags, and frame references.",
+    "categories": ["productivity", "ai"],
+    "keywords": ["video", "transcript", "analysis", "gemini", "avt", "youtube", "frames"]
+  },
+  "plugins": [
+    {
+      "name": "analyze",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

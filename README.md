@@ -13,13 +13,22 @@ Output: video-slug.avt + frames/ directory
 
 The easiest way to use video-analyzer. No manual setup required.
 
-**1. Add the skill** — In Claude Code, add this repository URL as a skill source:
+### Option A: Plugin Marketplace
 
 ```
-https://github.com/docusphere/video-analyzer
+/plugin marketplace add docusphere/video-analyzer
+/plugin install analyze@video-analyzer
 ```
 
-**2. Run it** — From any project, type:
+### Option B: Manual Clone
+
+```bash
+git clone https://github.com/docusphere/video-analyzer.git ~/.claude/skills/analyze
+```
+
+### Use it
+
+From any project, type:
 
 ```
 /analyze https://youtube.com/watch?v=VIDEO_ID
@@ -28,7 +37,7 @@ https://github.com/docusphere/video-analyzer
 /analyze /path/to/local-video.mp4
 ```
 
-**3. That's it** — On first run, Claude will automatically:
+On first run, Claude will automatically:
 - Install Python dependencies
 - Install ffmpeg and yt-dlp (macOS with Homebrew)
 - Ask for your Gemini API key and save it securely
