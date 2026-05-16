@@ -24,3 +24,6 @@ frames/
 # Temp
 watch-*/
 *.tmp
+
+# Test
+.pytest_cache/
