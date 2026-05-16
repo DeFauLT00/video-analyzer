@@ -29,7 +29,7 @@ The `.avt` format gives AI agents everything they need to understand a video wit
 ### Install
 
 ```bash
-git clone https://github.com/yourusername/video-analyzer.git
+git clone https://github.com/franknillard/video-analyzer.git
 cd video-analyzer
 pip install -r requirements.txt
 python3 scripts/preflight.py  # checks + scaffolds config
@@ -111,13 +111,25 @@ Full format spec: [docs/avt-spec.md](docs/avt-spec.md)
 
 ~$0.05 per 10-minute video (Gemini 2.5 Flash). Whisper adds ~$0.01/minute if no captions available.
 
-## Claude Code Integration
+## Use as a Claude Code Skill
 
-This tool works as a Claude Code skill. Add it to your project and use:
+Add this repo as a skill in Claude Code and use `/analyze` from any project:
 
 ```
-/analyze <video-url>
+/analyze https://youtube.com/watch?v=VIDEO_ID
 ```
+
+Claude will handle setup, download, analysis, and present you with a structured breakdown of the video — scenes, transcript, visual descriptions, and extracted frames.
+
+### Install as a skill
+
+In your Claude Code settings, add the repository URL as a skill source:
+
+```
+https://github.com/franknillard/video-analyzer
+```
+
+First run will auto-install dependencies and ask for your Gemini API key.
 
 ## License
 
