@@ -1,14 +1,34 @@
 Copyright (c) 2026 Frank Nillard. All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+SOURCE-AVAILABLE LICENSE
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to use,
+copy, and modify the Software for PERSONAL, EDUCATIONAL, and NON-COMMERCIAL
+purposes only, subject to the following conditions:
+
+1. ATTRIBUTION REQUIRED. The above copyright notice and this permission notice
+   shall be included in all copies or substantial portions of the Software.
+   You must give appropriate credit to the original author (Frank Nillard),
+   provide a link to the original repository, and indicate if changes were made.
+
+2. NO COMMERCIAL USE. You may not use the Software, or any derivative works,
+   for commercial purposes without prior written permission from the copyright
+   holder. Commercial purposes include, but are not limited to: selling the
+   Software or derivative works, using the Software as part of a paid product
+   or service, or using the Software to generate revenue directly or indirectly.
+
+3. NO REDISTRIBUTION AS YOUR OWN. You may not present the Software or
+   substantial portions thereof as your own original work. Forks and
+   modifications must clearly acknowledge the original source.
+
+4. NO SUBLICENSING. You may not sublicense the Software or grant others rights
+   beyond what this license permits.
+
+5. SHARE-ALIKE. If you distribute modified versions of the Software, you must
+   do so under this same license.
+
+For commercial licensing inquiries, contact the copyright holder.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,

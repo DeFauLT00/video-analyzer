@@ -6,7 +6,7 @@ allowed-tools: Bash, Read, AskUserQuestion
 homepage: https://github.com/franknillard/video-analyzer
 repository: https://github.com/franknillard/video-analyzer
 author: franknillard
-license: MIT
+license: Source-Available (Non-Commercial)
 user-invocable: true
 ---
 

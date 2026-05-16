@@ -133,4 +133,6 @@ First run will auto-install dependencies and ask for your Gemini API key.
 
 ## License
 
-Copyright (c) 2026 Frank Nillard. MIT License.
+Copyright (c) 2026 Frank Nillard. Source-Available (Non-Commercial).
+
+Free for personal and educational use. Commercial use requires written permission. See [LICENSE](LICENSE) for full terms.
