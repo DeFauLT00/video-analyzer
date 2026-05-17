@@ -9,26 +9,39 @@ Input:  Any video URL or local file
 Output: video-slug.avt + frames/ directory
 ```
 
-## Install as a Claude Code Skill (Recommended)
+## Install
 
-The easiest way to use video-analyzer. No manual setup required.
+Three ways to install, depending on how you want to use it.
 
-### Option A: Plugin Marketplace
+### Option A: Global Install (works from any project)
+
+Clone to your global Claude Code skills directory. After this, `/analyze` is available in every project you open:
+
+```bash
+git clone https://github.com/docusphere/video-analyzer.git ~/.claude/skills/analyze
+```
+
+### Option B: Project-Local Install (works in one project only)
+
+Clone into a specific project's `.claude/skills/` directory. The skill only works when you're inside that project:
+
+```bash
+cd /path/to/your-project
+git clone https://github.com/docusphere/video-analyzer.git .claude/skills/analyze
+```
+
+### Option C: Plugin Marketplace
+
+If available, install via the Claude Code plugin system:
 
 ```
 /plugin marketplace add docusphere/video-analyzer
 /plugin install analyze@video-analyzer
 ```
 
-### Option B: Manual Clone
+### First run
 
-```bash
-git clone https://github.com/docusphere/video-analyzer.git ~/.claude/skills/analyze
-```
-
-### Use it
-
-From any project, type:
+After installing, type `/analyze` from any project (global) or your project (local):
 
 ```
 /analyze https://youtube.com/watch?v=VIDEO_ID
