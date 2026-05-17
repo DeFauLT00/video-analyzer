@@ -18,8 +18,10 @@ Thumbs.db
 .idea/
 
 # Output
+avt_outputs/
 *.avt
 frames/
+*-frames/
 
 # Temp
 watch-*/

@@ -118,12 +118,14 @@ def main():
 
         # Step 4: Extract frames
         print("Step 4/5: Extracting frames...", file=sys.stderr)
-        out_dir = os.path.abspath(args.out_dir)
+        base_out_dir = os.path.abspath(args.out_dir)
+        video_out_dir = os.path.join(base_out_dir, 'avt_outputs', dl['slug'])
+        os.makedirs(video_out_dir, exist_ok=True)
+
         width = 256 if args.low_res else 512
         frame_results = extract_frames(
-            dl['video_path'], visual_segments, out_dir,
+            dl['video_path'], visual_segments, video_out_dir,
             max_frames=args.max_frames, width=width,
-            slug=dl['slug'],
         )
 
         # Step 5: Assemble .avt file
@@ -159,12 +161,13 @@ def main():
             'transcript_source': transcript['source'],
         }
 
-        avt_path = os.path.join(out_dir, f"{dl['slug']}.avt")
+        avt_path = os.path.join(video_out_dir, f"{dl['slug']}.avt")
         write_avt(metadata, aligned, avt_path)
 
         # Output final path to stdout
         print(avt_path)
         print(f"\nDone! {len(aligned)} segments, {len(frame_results)} frames.", file=sys.stderr)
+        print(f"Output: {video_out_dir}", file=sys.stderr)
 
     finally:
         # Cleanup temp files

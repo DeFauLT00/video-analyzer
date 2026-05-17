@@ -59,8 +59,8 @@ def test_full_pipeline_local_file(tmp_path, monkeypatch):
         from analyze import main
         main()
 
-    # Verify .avt file was created
-    avt_path = out_dir / "test-video-integration.avt"
+    # Verify .avt file was created in nested structure
+    avt_path = out_dir / "avt_outputs" / "test-video-integration" / "test-video-integration.avt"
     assert avt_path.exists()
 
     # Parse and validate
