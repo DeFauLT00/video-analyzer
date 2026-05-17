@@ -45,21 +45,27 @@ def _build_frame_cmd(video_path: str, seconds: float, output_path: str, width: i
 
 
 def extract_frames(video_path: str, segments: list, output_dir: str,
-                   max_frames: int = 80, width: int = 512) -> list:
+                   max_frames: int = 80, width: int = 512,
+                   slug: str = None) -> list:
     """
     Extract JPEG frames at segment start timestamps.
 
     Args:
         video_path: Path to video file
         segments: List of dicts with 'start' key (from understand.py)
-        output_dir: Directory to write frames/ into
+        output_dir: Directory to write frames into
         max_frames: Maximum number of frames to extract
         width: Frame width in pixels
+        slug: Video slug for namespaced frames directory
 
     Returns:
         List of {'path': str, 'timestamp': str, 'seconds': float}
     """
-    frames_dir = os.path.join(output_dir, 'frames')
+    if slug:
+        frames_dirname = f"{slug}-frames"
+    else:
+        frames_dirname = 'frames'
+    frames_dir = os.path.join(output_dir, frames_dirname)
     os.makedirs(frames_dir, exist_ok=True)
 
     all_timestamps = []
@@ -82,7 +88,7 @@ def extract_frames(video_path: str, segments: list, output_dir: str,
             print(f"Warning: frame extraction failed at {seconds}s: {result.stderr}", file=sys.stderr)
             continue
 
-        relative_path = os.path.join('frames', filename)
+        relative_path = os.path.join(frames_dirname, filename)
         results.append({
             'path': relative_path,
             'timestamp': _seconds_to_timestamp(seconds),

@@ -123,6 +123,7 @@ def main():
         frame_results = extract_frames(
             dl['video_path'], visual_segments, out_dir,
             max_frames=args.max_frames, width=width,
+            slug=dl['slug'],
         )
 
         # Step 5: Assemble .avt file
