@@ -151,11 +151,37 @@ Then: "Compare these 3 videos — what patterns do you see in their hooks, struc
 
 ## How it works
 
-1. **Download** — yt-dlp fetches the video (supports 400+ sites via yt-dlp)
-2. **Transcribe** — Native captions extracted first, Whisper API fallback if none available
-3. **Understand** — Video uploaded to Gemini 2.5 Flash for native video understanding (not frame-by-frame — the model sees the actual video)
-4. **Extract** — JPEG frames pulled at AI-identified key moments via ffmpeg
-5. **Assemble** — Everything combined into the `.avt` format
+```
+Video URL or file
+    │
+    ▼
+1. DOWNLOAD ─── yt-dlp fetches the video locally (1400+ sites supported)
+    │
+    ▼
+2. TRANSCRIBE ── Pulls native captions for free. If none exist, falls back
+    │              to Whisper API (Groq or OpenAI) for speech-to-text
+    │
+    ▼
+3. UNDERSTAND ── Full video file uploaded to Gemini 2.5 Flash. Gemini
+    │              watches the entire video natively (~1 frame/sec + audio).
+    │              Returns structured JSON: timestamps, visual descriptions,
+    │              and scene tags for every meaningful moment.
+    │              Video is deleted from Gemini immediately after.
+    │
+    ▼
+4. EXTRACT ──── ffmpeg pulls JPEG frames at the exact timestamps Gemini
+    │              identified as key moments. No dumb even-spacing — frames
+    │              are taken where something visually meaningful happens.
+    │
+    ▼
+5. ASSEMBLE ─── Transcript, visual descriptions, scene tags, and frame
+    │              paths are merged and aligned by timestamp into the .avt file.
+    │
+    ▼
+OUTPUT: avt_outputs/<slug>/<slug>.avt + frames/
+```
+
+The `.avt` file is the final output — it is not used during the pipeline. It exists as a structured handoff document for Claude, downstream agents, or any tool that needs to understand what's in the video without watching it.
 
 ## Limits
 
