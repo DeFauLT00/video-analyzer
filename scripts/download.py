@@ -86,17 +86,23 @@ def download_video(source: str, cache_dir: str) -> dict:
         'yt-dlp',
         '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
         '--write-subs', '--write-auto-subs',
-        '--sub-langs', 'en.*,en',
+        '--sub-langs', 'it.*,it,en.*,en',
         '--sub-format', 'vtt',
         '--no-playlist',
+        '--ignore-errors',
         '-o', output_template,
         source,
     ]
     print(f"Downloading: {title}...", file=sys.stderr)
     dl_result = subprocess.run(dl_cmd, capture_output=True, text=True)
 
+    # Allow non-zero exit if the video itself downloaded (subtitle errors are non-fatal)
+    stderr_lower = dl_result.stderr.lower()
+    fatal_errors = ['unable to download', 'private video', 'age-restricted', 'sign in']
     if dl_result.returncode != 0:
-        raise RuntimeError(f"yt-dlp download failed: {dl_result.stderr.strip()}")
+        has_fatal = any(e in stderr_lower for e in fatal_errors) and 'subtitle' not in stderr_lower
+        if has_fatal:
+            raise RuntimeError(f"yt-dlp download failed: {dl_result.stderr.strip()}")
 
     # Find downloaded files
     video_path = None
